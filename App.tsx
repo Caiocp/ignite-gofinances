@@ -33,7 +33,8 @@ export default function App() {
     <ThemeProvider theme={theme}>
       <StatusBar
         barStyle="light-content"
-        backgroundColor={theme.colors.primary}
+        backgroundColor="transparent"
+        translucent
       />
       <NavigationContainer>
         <AppRoutes />

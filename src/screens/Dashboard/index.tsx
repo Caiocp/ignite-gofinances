@@ -26,6 +26,7 @@ import {
   TransactionsList,
   LoadingContainer,
 } from './styles';
+import { dateFormatter, moneyFormatter } from '../../utils/formmaters';
 
 export interface DataListProps extends TransactionCardProps {
   id: string;
@@ -85,16 +86,9 @@ export const Dashboard: React.FC = () => {
           outcomeBalance += Number(transaction.amount);
         }
 
-        const amount = Number(transaction.amount).toLocaleString('pt-BR', {
-          style: 'currency',
-          currency: 'BRL',
-        });
+        const amount = moneyFormatter(Number(transaction.amount));
 
-        const dateFormatted = Intl.DateTimeFormat('pt-BR', {
-          day: '2-digit',
-          month: '2-digit',
-          year: '2-digit',
-        }).format(new Date(transaction.date));
+        const dateFormatted = dateFormatter(transaction.date);
 
         return {
           ...transaction,
@@ -113,7 +107,7 @@ export const Dashboard: React.FC = () => {
       transactions,
       'outcome'
     );
-    const teste = new Date(
+    const dayOfFirstTransaction = new Date(
       Math.min.apply(
         Math,
         transactions
@@ -121,29 +115,19 @@ export const Dashboard: React.FC = () => {
           .map((item: DataListProps) => new Date(item.date).getTime())
       )
     ).getDate();
-    console.log(teste);
-    const totalInterval = `${teste} a ${lastOutgoingTransactions}`;
+    const totalInterval = `${dayOfFirstTransaction} a ${lastOutgoingTransactions}`;
 
     setHighlightData({
       entries: {
-        amount: incomeBalance.toLocaleString('pt-BR', {
-          style: 'currency',
-          currency: 'BRL',
-        }),
+        amount: moneyFormatter(incomeBalance),
         lastTransaction: `Última entrada dia ${lastIncomingTransactions}`,
       },
       outgoings: {
-        amount: outcomeBalance.toLocaleString('pt-BR', {
-          style: 'currency',
-          currency: 'BRL',
-        }),
+        amount: moneyFormatter(outcomeBalance),
         lastTransaction: `Última entrada dia ${lastOutgoingTransactions}`,
       },
       total: {
-        amount: (incomeBalance - outcomeBalance).toLocaleString('pt-BR', {
-          style: 'currency',
-          currency: 'BRL',
-        }),
+        amount: moneyFormatter(incomeBalance - outcomeBalance),
         lastTransaction: totalInterval,
       },
     });

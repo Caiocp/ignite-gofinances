@@ -106,7 +106,6 @@ export const Register: React.FC = () => {
 
   const fetchData = async (dataKey: string) => {
     const data = await AsyncStorage.getItem(dataKey);
-    console.log(JSON.parse(data!));
     return JSON.parse(data!);
   };
 
