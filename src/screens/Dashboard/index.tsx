@@ -25,7 +25,7 @@ export interface DataListProps extends TransactionCardProps {
   id: string;
 }
 
-const Dashboard: React.FC = () => {
+export const Dashboard: React.FC = () => {
   const data: DataListProps[] = [
     {
       id: '1',
@@ -117,5 +117,3 @@ const Dashboard: React.FC = () => {
     </Container>
   );
 };
-
-export default Dashboard;
