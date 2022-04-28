@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { BackHandler } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { HighlightCard } from '../../components/HighlightCard';
 import {
@@ -22,46 +23,54 @@ import {
   Title,
   TransactionsList,
 } from './styles';
+import { useFocusEffect } from '@react-navigation/native';
 
 export interface DataListProps extends TransactionCardProps {
   id: string;
 }
 
 export const Dashboard: React.FC = () => {
-  const data: DataListProps[] = [
-    {
-      id: '1',
-      type: 'income',
-      title: 'Desenvolvimento de app',
-      amount: 'R$ 12.000,00',
-      category: { name: 'Vendas', icon: 'dollar-sign' },
-      date: '27/04/2022',
-    },
-    {
-      id: '2',
-      type: 'outcome',
-      title: 'placa de vídeo',
-      amount: 'R$ 2.000,00',
-      category: { name: 'Compra', icon: 'shopping-bag' },
-      date: '27/04/2022',
-    },
-    {
-      id: '3',
-      type: 'income',
-      title: 'Desenvolvimento de site',
-      amount: 'R$ 10.000,00',
-      category: { name: 'Vendas', icon: 'dollar-sign' },
-      date: '27/04/2022',
-    },
-    {
-      id: '4',
-      type: 'outcome',
-      title: 'Burgão da massa',
-      amount: 'R$ 40,00',
-      category: { name: 'Alimentação', icon: 'coffee' },
-      date: '27/04/2022',
-    },
-  ];
+  const [data, setData] = useState<DataListProps[]>([]);
+
+  const dataKey = '@gofinances:transactions';
+
+  const fetchTransactions = async () => {
+    const response = await AsyncStorage.getItem(dataKey);
+    const transactions = response ? JSON.parse(response) : [];
+    console.log(transactions);
+    const transactionsFormatted: DataListProps[] = transactions.map(
+      (transaction: DataListProps) => {
+        const amount = Number(transaction.amount).toLocaleString('pt-BR', {
+          style: 'currency',
+          currency: 'BRL',
+        });
+
+        const dateFormatted = Intl.DateTimeFormat('pt-BR', {
+          day: '2-digit',
+          month: '2-digit',
+          year: '2-digit',
+        }).format(new Date(transaction.date));
+
+        return {
+          ...transaction,
+          amount,
+          date: dateFormatted,
+        };
+      }
+    );
+    console.log(transactionsFormatted);
+    setData(transactionsFormatted);
+  };
+
+  useEffect(() => {
+    fetchTransactions();
+  }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchTransactions();
+    }, [])
+  );
 
   return (
     <Container>

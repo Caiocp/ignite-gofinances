@@ -6,8 +6,9 @@ import { MaterialIcons } from '@expo/vector-icons';
 
 import { Dashboard } from './screens/Dashboard';
 import { Register } from './screens/Register';
+import { AppRoutesParamList } from './@types/app.routes';
 
-const { Navigator, Screen } = createBottomTabNavigator();
+const { Navigator, Screen } = createBottomTabNavigator<AppRoutesParamList>();
 
 export const AppRoutes: React.FC = () => {
   const theme = useTheme();
