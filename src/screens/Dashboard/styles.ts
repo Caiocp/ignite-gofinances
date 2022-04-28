@@ -63,6 +63,8 @@ export const UserName = styled.Text`
   font-size: ${RFValue(18)}px;
 `;
 
+export const LogoutButton = styled.TouchableWithoutFeedback``;
+
 export const Icon = styled(Feather)`
   color: ${({ theme }) => theme.colors.secondary};
   font-size: ${RFValue(24)}px;
@@ -72,6 +74,9 @@ export const HighlightCards = styled.ScrollView.attrs({
   horizontal: true,
   showsHorizontalScrollIndicator: false,
   contentContainerStyle: { paddingLeft: 24, paddingRight: 8 },
+  decelerationRate: 0,
+  snapToInterval: RFValue(325),
+  snapToAlignment: 'center',
 })`
   width: 100%;
   position: absolute;

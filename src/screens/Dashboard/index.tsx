@@ -1,4 +1,5 @@
 import React from 'react';
+import { BackHandler } from 'react-native';
 
 import { HighlightCard } from '../../components/HighlightCard';
 import {
@@ -14,6 +15,7 @@ import {
   User,
   UserGreetings,
   UserName,
+  LogoutButton,
   Icon,
   HighlightCards,
   Transactions,
@@ -77,15 +79,17 @@ export const Dashboard: React.FC = () => {
             </User>
           </UserInfo>
 
-          <Icon name="power" />
+          <LogoutButton
+            onPress={() => {
+              BackHandler.exitApp();
+            }}
+          >
+            <Icon name="power" />
+          </LogoutButton>
         </UserWrapper>
       </Header>
 
-      <HighlightCards
-        decelerationRate={0}
-        snapToInterval={350}
-        snapToAlignment="center"
-      >
+      <HighlightCards>
         <HighlightCard
           type="income"
           title="Entradas"
