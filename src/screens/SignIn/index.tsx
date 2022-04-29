@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert } from 'react-native';
+import { Alert, Platform } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 
 import { SocialSignInButton } from '../../components/SocialSignInButton';
@@ -19,14 +19,23 @@ import {
 } from './styles';
 
 export const SignIn: React.FC = () => {
-  const { signInWithGoogle } = useAuth();
+  const { signInWithGoogle, signInWithApple } = useAuth();
 
   const handleSignInWithGoogle = async () => {
     try {
       await signInWithGoogle();
     } catch (error) {
       console.log(error);
-      Alert.alert('Erro', 'Ocorreu um erro ao fazer login');
+      Alert.alert('Erro', 'Ocorreu um erro ao fazer login com Google');
+    }
+  };
+
+  const handleSignInWithApple = async () => {
+    try {
+      await signInWithGoogle();
+    } catch (error) {
+      console.log(error);
+      Alert.alert('Erro', 'Ocorreu um erro ao fazer login com Apple');
     }
   };
 
@@ -51,7 +60,13 @@ export const SignIn: React.FC = () => {
             svg={GoogleSvg}
             onPress={handleSignInWithGoogle}
           />
-          <SocialSignInButton title="Entrar com Apple" svg={AppleSvg} />
+          {Platform.OS === 'ios' && (
+            <SocialSignInButton
+              title="Entrar com Apple"
+              svg={AppleSvg}
+              onPress={handleSignInWithApple}
+            />
+          )}
         </FooterWrapper>
       </Footer>
     </Container>
