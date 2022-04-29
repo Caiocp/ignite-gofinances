@@ -40,6 +40,9 @@ export const Footer = styled.View`
   width: 100%;
   height: 30%;
   background-color: ${({ theme }) => theme.colors.secondary};
+
+  justify-content: space-between;
+  padding-bottom: 48px;
 `;
 
 export const FooterWrapper = styled.View`

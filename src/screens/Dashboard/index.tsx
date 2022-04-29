@@ -9,6 +9,8 @@ import {
   TransactionCard,
   TransactionCardProps,
 } from '../../components/TransactionCard';
+import { dateFormatter, moneyFormatter } from '../../utils/formmaters';
+import { useAuth } from '../../hooks/auth';
 import {
   Container,
   Header,
@@ -26,7 +28,6 @@ import {
   TransactionsList,
   LoadingContainer,
 } from './styles';
-import { dateFormatter, moneyFormatter } from '../../utils/formmaters';
 
 export interface DataListProps extends TransactionCardProps {
   id: string;
@@ -50,6 +51,7 @@ export const Dashboard: React.FC = () => {
   );
 
   const theme = useTheme();
+  const { signOut } = useAuth();
 
   const dataKey = '@gofinances:transactions';
 
@@ -167,12 +169,7 @@ export const Dashboard: React.FC = () => {
                 </User>
               </UserInfo>
 
-              <LogoutButton
-                onPress={() => {
-                  AsyncStorage.removeItem(dataKey);
-                  // BackHandler.exitApp();
-                }}
-              >
+              <LogoutButton onPress={signOut}>
                 <Icon name="power" />
               </LogoutButton>
             </UserWrapper>

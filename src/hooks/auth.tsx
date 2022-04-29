@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as AuthSession from 'expo-auth-session';
 import * as AppleAuthentication from 'expo-apple-authentication';
@@ -21,6 +21,8 @@ interface IAuthContextData {
   user: User;
   signInWithGoogle: () => Promise<void>;
   signInWithApple: () => Promise<void>;
+  signOut: () => Promise<void>;
+  userStorageLoading: boolean;
 }
 
 interface AuthorizationResponse {
@@ -34,6 +36,9 @@ const AuthContext = createContext({} as IAuthContextData);
 
 const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<User>({} as User);
+  const [userStorageLoading, setUserStorageLoading] = useState(true);
+
+  const dataKey = '@gofinances:user';
 
   const signInWithGoogle = async () => {
     try {
@@ -52,13 +57,14 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
         );
 
         const userInfo = await response.json();
-        console.log(userInfo);
+
         setUser({
           id: userInfo.id,
           name: userInfo.given_name,
           email: userInfo.email,
           photo: userInfo.picture,
         });
+        await AsyncStorage.setItem(dataKey, JSON.stringify(userInfo));
       }
     } catch (error) {
       throw new Error(error);
@@ -66,7 +72,6 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
   };
 
   const signInWithApple = async () => {
-    const dataKey = '@gofinances:user';
     try {
       const credential = await AppleAuthentication.signInAsync({
         requestedScopes: [
@@ -89,8 +94,34 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   };
 
+  const signOut = async () => {
+    setUser({} as User);
+    await AsyncStorage.removeItem(dataKey);
+  };
+
+  useEffect(() => {
+    const fetchLoadUserData = async () => {
+      const data = await AsyncStorage.getItem(dataKey);
+      if (data) {
+        const userInfo = JSON.parse(data);
+        setUser(userInfo);
+      }
+
+      setUserStorageLoading(false);
+    };
+    fetchLoadUserData();
+  }, []);
+
   return (
-    <AuthContext.Provider value={{ user, signInWithGoogle, signInWithApple }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        signInWithGoogle,
+        signInWithApple,
+        signOut,
+        userStorageLoading,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
