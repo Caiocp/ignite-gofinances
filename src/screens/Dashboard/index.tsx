@@ -53,18 +53,22 @@ export const Dashboard: React.FC = () => {
   const theme = useTheme();
   const { user, signOut } = useAuth();
 
-  const dataKey = '@gofinances:transactions';
+  const dataKey = `@gofinances:transactions_user:${user.id}`;
 
   const getLastTransactionDate = (
     collection: DataListProps[],
     type: 'income' | 'outcome'
   ) => {
+    const filteredCollection = collection.filter((item) => item.type === type);
+
+    if (filteredCollection.length === 0) {
+      return 0;
+    }
+
     const lastTransaction = new Date(
       Math.max.apply(
         Math,
-        collection
-          .filter((item) => item.type === type)
-          .map((item) => new Date(item.date).getTime())
+        filteredCollection.map((item) => new Date(item.date).getTime())
       )
     );
     return `${lastTransaction.getDate()} de ${lastTransaction.toLocaleString(
@@ -109,24 +113,25 @@ export const Dashboard: React.FC = () => {
       transactions,
       'outcome'
     );
-    const dayOfFirstTransaction = new Date(
-      Math.min.apply(
-        Math,
-        transactions
-          .filter((item: DataListProps) => item.type === 'income')
-          .map((item: DataListProps) => new Date(item.date).getTime())
-      )
-    ).getDate();
-    const totalInterval = `${dayOfFirstTransaction} a ${lastOutgoingTransactions}`;
+
+    const totalInterval = lastOutgoingTransactions
+      ? lastOutgoingTransactions
+        ? `01 à ${lastOutgoingTransactions}`
+        : 'Nenhuma transação de entrada'
+      : 'Nenhuma transação de saída';
 
     setHighlightData({
       entries: {
         amount: moneyFormatter(incomeBalance),
-        lastTransaction: `Última entrada dia ${lastIncomingTransactions}`,
+        lastTransaction: lastIncomingTransactions
+          ? `Última entrada dia ${lastIncomingTransactions}`
+          : 'Nenhuma transação cadastrada',
       },
       outgoings: {
         amount: moneyFormatter(outcomeBalance),
-        lastTransaction: `Última entrada dia ${lastOutgoingTransactions}`,
+        lastTransaction: lastOutgoingTransactions
+          ? `Última entrada dia ${lastOutgoingTransactions}`
+          : 'Nenhuma transação cadastrada',
       },
       total: {
         amount: moneyFormatter(incomeBalance - outcomeBalance),

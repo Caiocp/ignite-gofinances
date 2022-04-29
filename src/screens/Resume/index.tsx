@@ -12,6 +12,7 @@ import { HistoryCard } from '../../components/HistoryCard';
 import { TransactionCardProps } from '../../components/TransactionCard';
 import { categories } from '../../utils/categories';
 import { moneyFormatter } from '../../utils/formmaters';
+import { useAuth } from '../../hooks/auth';
 
 import {
   Container,
@@ -43,8 +44,9 @@ export const Resume: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const theme = useTheme();
+  const { user } = useAuth();
 
-  const dataKey = '@gofinances:transactions';
+  const dataKey = `@gofinances:transactions_user:${user.id}`;
 
   const fetchData = async () => {
     const response = await AsyncStorage.getItem(dataKey);

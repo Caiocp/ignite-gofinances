@@ -22,6 +22,7 @@ import {
   Fields,
   TransactionsTypes,
 } from './styles';
+import { useAuth } from '../../hooks/auth';
 
 interface FormData {
   [key: string]: string;
@@ -50,9 +51,11 @@ export const Register: React.FC = () => {
     reset,
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) });
+  const { user } = useAuth();
+
   const navigation = useNavigation<NavigationProp<AppRoutesParamList>>();
 
-  const dataKey = '@gofinances:transactions';
+  const dataKey = `@gofinances:transactions_user:${user.id}`;
 
   const handleSelectTransactionTypeSelect = (type: 'income' | 'outcome') => {
     setTransactionType(type);
