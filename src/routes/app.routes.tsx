@@ -3,11 +3,11 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useTheme } from 'styled-components';
 import { Platform } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-import { AppRoutesParamList } from './@types/routes/app.routes';
+import { AppRoutesParamList } from '../@types/routes/app.routes';
 
-import { Dashboard } from './screens/Dashboard';
-import { Register } from './screens/Register';
-import { Resume } from './screens/Resume';
+import { Dashboard } from '../screens/Dashboard';
+import { Register } from '../screens/Register';
+import { Resume } from '../screens/Resume';
 
 const { Navigator, Screen } = createBottomTabNavigator<AppRoutesParamList>();
 
