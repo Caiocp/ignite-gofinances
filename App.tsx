@@ -17,7 +17,7 @@ import {
 import { AppRoutes } from './src/routes/app.routes';
 
 import theme from './src/global/styles/theme';
-import { Signin } from './src/screens/Signin';
+import { SignIn } from './src/screens/SignIn';
 import { AuthProvider } from './src/hooks/auth';
 
 export default function App() {
@@ -41,7 +41,7 @@ export default function App() {
       <NavigationContainer>
         {/* <AppRoutes /> */}
         <AuthProvider>
-          <Signin />
+          <SignIn />
         </AuthProvider>
       </NavigationContainer>
     </ThemeProvider>

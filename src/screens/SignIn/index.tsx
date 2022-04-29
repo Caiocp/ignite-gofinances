@@ -1,7 +1,8 @@
 import React from 'react';
+import { Alert } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 
-import { SocialSigninButton } from '../../components/SocialSigninButton';
+import { SocialSignInButton } from '../../components/SocialSignInButton';
 import { useAuth } from '../../hooks/auth';
 import AppleSvg from '../../assets/apple.svg';
 import GoogleSvg from '../../assets/google.svg';
@@ -12,13 +13,22 @@ import {
   Header,
   TitleWrapper,
   Title,
-  SigninTitle,
+  SignInTitle,
   Footer,
   FooterWrapper,
 } from './styles';
 
-export const Signin: React.FC = () => {
-  const data = useAuth();
+export const SignIn: React.FC = () => {
+  const { signInWithGoogle } = useAuth();
+
+  const handleSignInWithGoogle = async () => {
+    try {
+      await signInWithGoogle();
+    } catch (error) {
+      console.log(error);
+      Alert.alert('Erro', 'Ocorreu um erro ao fazer login');
+    }
+  };
 
   return (
     <Container>
@@ -31,13 +41,17 @@ export const Signin: React.FC = () => {
           </Title>
         </TitleWrapper>
 
-        <SigninTitle>Faça seu login com{'\n'}uma das contas abaixo</SigninTitle>
+        <SignInTitle>Faça seu login com{'\n'}uma das contas abaixo</SignInTitle>
       </Header>
 
       <Footer>
         <FooterWrapper>
-          <SocialSigninButton title="Entrar com Google" svg={GoogleSvg} />
-          <SocialSigninButton title="Entrar com Apple" svg={AppleSvg} />
+          <SocialSignInButton
+            title="Entrar com Google"
+            svg={GoogleSvg}
+            onPress={handleSignInWithGoogle}
+          />
+          <SocialSignInButton title="Entrar com Apple" svg={AppleSvg} />
         </FooterWrapper>
       </Footer>
     </Container>

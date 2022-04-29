@@ -27,7 +27,7 @@ export const Title = styled.Text`
   margin-top: 45px;
 `;
 
-export const SigninTitle = styled.Text`
+export const SignInTitle = styled.Text`
   font-family: ${({ theme }) => theme.fonts.regular};
   color: ${({ theme }) => theme.colors.shape};
   font-size: ${RFValue(16)}px;

@@ -9,9 +9,9 @@ interface Props extends TouchableOpacityProps {
   svg: React.FC<SvgProps>;
 }
 
-export const SocialSigninButton = ({ title, svg: Svg }: Props) => {
+export const SocialSignInButton = ({ title, svg: Svg, ...rest }: Props) => {
   return (
-    <Button onPress={() => {}}>
+    <Button {...rest}>
       <ButtonContainer>
         <ImageContainer>
           <Svg />
