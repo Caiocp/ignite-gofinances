@@ -137,7 +137,6 @@ export const Dashboard: React.FC = () => {
 
   useEffect(() => {
     fetchTransactions();
-    // AsyncStorage.removeItem(dataKey);
   }, []);
 
   useFocusEffect(
@@ -170,7 +169,8 @@ export const Dashboard: React.FC = () => {
 
               <LogoutButton
                 onPress={() => {
-                  BackHandler.exitApp();
+                  AsyncStorage.removeItem(dataKey);
+                  // BackHandler.exitApp();
                 }}
               >
                 <Icon name="power" />
