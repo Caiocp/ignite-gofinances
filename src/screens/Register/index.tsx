@@ -13,7 +13,7 @@ import { CategorySelect } from '../CategorySelect';
 import { CategorySelectButton } from '../../components/Form/CategorySelectButton';
 import { TransactionTypeButton } from '../../components/Form/TransactionTypeButton';
 
-import { AppRoutesParamList } from '../../@types/app.routes';
+import { AppRoutesParamList } from '../../@types/routes/app.routes';
 import {
   Container,
   Header,

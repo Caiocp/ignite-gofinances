@@ -75,7 +75,7 @@ export const Resume: React.FC = () => {
         }
       });
 
-      const percentage = `${((categorySum / totalOutcomes) * 100).toFixed(2)}%`;
+      const percentage = `${((categorySum / totalOutcomes) * 100).toFixed(0)}%`;
 
       if (categorySum > 0) {
         totalByCategory.push({
