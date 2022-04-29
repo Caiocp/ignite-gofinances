@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as AuthSession from 'expo-auth-session';
 import * as AppleAuthentication from 'expo-apple-authentication';
+import { Platform } from 'react-native';
 
 const { CLIENT_ID } = process.env;
 const { REDIRECT_URI } = process.env;
@@ -39,6 +40,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
   const [userStorageLoading, setUserStorageLoading] = useState(true);
 
   const dataKey = '@gofinances:user';
+  const appleKey = '@gofinances:appleUser';
 
   const signInWithGoogle = async () => {
     try {
@@ -80,14 +82,17 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
         ],
       });
       if (credential) {
+        const name = credential.fullName?.givenName!;
+        const photo = `https://ui-avatars.com/api/?name=${name}&length=1&size=48`;
         const userLogged = {
           id: String(credential.user),
-          name: credential.fullName?.givenName!,
+          name,
           email: credential.email!,
-          photo: undefined,
+          photo,
         };
         setUser(userLogged);
         await AsyncStorage.setItem(dataKey, JSON.stringify(userLogged));
+        await AsyncStorage.setItem(appleKey, JSON.stringify(userLogged));
       }
     } catch (error) {
       throw new Error(error);
@@ -101,7 +106,9 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 
   useEffect(() => {
     const fetchLoadUserData = async () => {
-      const data = await AsyncStorage.getItem(dataKey);
+      const data = await AsyncStorage.getItem(
+        Platform.OS === 'ios' ? appleKey : dataKey
+      );
       if (data) {
         const userInfo = JSON.parse(data);
         setUser(userInfo);

@@ -51,7 +51,7 @@ export const Dashboard: React.FC = () => {
   );
 
   const theme = useTheme();
-  const { signOut } = useAuth();
+  const { user, signOut } = useAuth();
 
   const dataKey = '@gofinances:transactions';
 
@@ -160,12 +160,12 @@ export const Dashboard: React.FC = () => {
               <UserInfo>
                 <Photo
                   source={{
-                    uri: 'https://avatars.githubusercontent.com/u/19747459?v=4',
+                    uri: user.photo,
                   }}
                 />
                 <User>
                   <UserGreetings>Olá, </UserGreetings>
-                  <UserName>Caio</UserName>
+                  <UserName>{user.name}</UserName>
                 </User>
               </UserInfo>
 
